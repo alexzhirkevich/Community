@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name" translatable="false">Community</string>
+
+    <!--TIME-->
+    <string name="short_year">y</string>
+    <string name="short_month">m</string>
+    <string name="short_week">w</string>
+    <string name="short_day">d</string>
+    <string name="short_hour">h</string>
+</resources>

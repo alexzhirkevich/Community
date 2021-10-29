@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="sm_channel_created">Created new channel</string>
+    <string name="sm_channel_avatar_changed">Channel avatar changed</string>
+    <string name="sm_channel_name_changed">Channel name changed to %s</string>
+    <string name="sm_chat_invited">%s invited %s</string>
+    <string name="sm_chat_avatar_changed">%s changed chat image</string>
+    <string name="sm_chat_name_changed">%s changed group name to %s</string>
+
+</resources>
