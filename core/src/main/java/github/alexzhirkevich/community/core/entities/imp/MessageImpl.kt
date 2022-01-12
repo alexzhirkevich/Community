@@ -15,7 +15,7 @@ open class MessageImpl(
     final override var replyTo: Message? = null,
     final override var isViewed: Boolean = false,
 
-    ) : UserSendableImpl(id = id, chatId = chatId,senderId = senderId,time = time),
+    ) : UserSendableImpl<Message>(id = id, chatId = chatId,senderId = senderId,time = time),
     Message {
 
     override fun equals(other: Any?): Boolean {

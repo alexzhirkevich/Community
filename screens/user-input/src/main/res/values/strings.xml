@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name">Name</string>
+    <string name="username_optional">Username (optional)</string>
+    <string name="description_optional">Description (optional)</string>
+
+    <string name="assist_name">The name that will be displayed on your profile.\n\nMinimum length is %d symbols</string>
+    <string name="assist_username">If you choose a username, people will be able to find you by this username and contact you without needing your phone number.\n\nYou can use a–z, 0–9 and underscores.\nMinimum length is %d symbols.</string>
+    <string name="assist_description">You can write some words about yourself or other useful information.\n\nLinks, tags and message markdown are valid.</string>
+
+
+    <string name="error_name_length">Minimum name length is %d</string>
+    <string name="error_usernaname_length">Minimum username length is %d</string>
+    <string name="profile">Profile</string>
+    <string name="error_usernaname_taken">Username is taken</string>
+</resources>

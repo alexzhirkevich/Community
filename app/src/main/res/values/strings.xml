@@ -1,21 +1,4 @@
 <resources>
     <string name="app_name">CommunityCompose</string>
-
-
-    <string name="chats">Chats</string>
-    <string name="profile">Profile</string>
-    <string name="calls">Calls</string>
-    <string name="events">Events</string>
-    <string name="phone">Phone</string>
-    <string name="send_code">Send code</string>
-    <string name="write_message">Write message</string>
-    <string name="create_group">Create group</string>
-    <string name="create_channel">Create channel</string>
-    <string name="error_load_data">Failed to load data. Check your Inthernet connection</string>
-    <string name="dont_have_channels">You are not a member of any channel. Join it or create new!</string>
-    <string name="dont_have_chats">You dont have any chats. Write someone</string>
-    <string name="subscribers"> %d subscribers</string>
-
-
-
+    
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="message_hint">Message...</string>
+    <string name="photos">Photos</string>
+    <string name="videos">Videos</string>
+    <string name="gifs">Gifs</string>
+</resources>

@@ -1,20 +1,28 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        compose_version = '1.0.3'
-        kotlin_version = '1.5.30'
+        compose_version = '1.1.0-beta02'
+        kotlin_version = '1.5.31'
         gradle_version = '7.0.2'
+        gson_version = '2.8.9'
+        nav_version = '2.4.0-beta01'
+        dagger_version = "2.35.1"
+        hilt_version = "2.38.1"
+        hilt_lifecycle = "1.0.0-alpha03"
+        hilt_navigation = "1.0.0-alpha03"
+        exo_version = "2.16.1"
+        glide_version = "1.4.3"
     }
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 

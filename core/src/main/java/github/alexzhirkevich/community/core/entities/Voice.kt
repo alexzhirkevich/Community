@@ -1,3 +1,6 @@
 package github.alexzhirkevich.community.core.entities
 
-data class Voice(val url : String, val len: Long)
+import github.alexzhirkevich.community.core.entities.interfaces.Entity
+
+data class Voice(override val url : String, val len: Long)
+    : NetworkContent

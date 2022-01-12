@@ -3,7 +3,7 @@ package github.alexzhirkevich.community.smt.translators
 import android.content.Context
 import github.alexzhirkevich.community.core.entities.MediaContent
 import github.alexzhirkevich.community.core.entities.interfaces.SystemMessage
-import github.alexzhirkevich.community.core.providers.interfaces.UsersProvider
+import github.alexzhirkevich.community.core.repo.interfaces.UsersRepository
 import github.alexzhirkevich.community.smt.R
 import github.alexzhirkevich.community.smt.SMTBase
 import github.alexzhirkevich.community.smt.TranslatedMessage
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.*
 
 @ExperimentalStdlibApi
 internal class ChannelSystemMessageTranslator(
-    private val usersProvider: UsersProvider) : SMTBase() {
+    private val usersProvider: UsersRepository) : SMTBase() {
 
     @TranslationSource(SystemMessage.MESSAGE_CHANNEL_CREATED)
     fun channelCreated(context: Context, msg: SystemMessage): Flow<TranslatedMessage> =

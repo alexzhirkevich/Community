@@ -10,10 +10,17 @@ class PostImpl(
     chatId: String="",
     senderId: String="",
     time: Long = System.currentTimeMillis(),
+    replyTo : Post?=null,
     override var text: String? = null,
     override var content: List<MediaContent>? = null,
     override var voice: Voice?  = null,
-) : UserSendableImpl(id = id,chatId = chatId,senderId = senderId,time = time), Post {
+) : UserSendableImpl<Post>(
+    id = id,
+    chatId = chatId,
+    replyTo = replyTo,
+    senderId = senderId,
+    time = time
+), Post {
 
     override fun compareTo(other: Entity): Int =
             if (other is PostImpl) time.compareTo(other.time) else 0

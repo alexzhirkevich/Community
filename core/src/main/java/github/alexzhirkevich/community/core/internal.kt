@@ -1,11 +1,12 @@
 package github.alexzhirkevich.community.core
 
 import android.net.Uri
-import github.alexzhirkevich.community.core.providers.interfaces.FirebaseProvider.Companion.FIELD_LAST_MESSAGE
-import github.alexzhirkevich.community.core.providers.interfaces.FirebaseProvider.Companion.FIELD_REPLY_TO
-import github.alexzhirkevich.community.core.providers.interfaces.FirebaseProvider.Companion.FIELD_TYPE
+import github.alexzhirkevich.community.core.repo.interfaces.FirebaseRepository.Companion.FIELD_LAST_MESSAGE
+import github.alexzhirkevich.community.core.repo.interfaces.FirebaseRepository.Companion.FIELD_REPLY_TO
+import github.alexzhirkevich.community.core.repo.interfaces.FirebaseRepository.Companion.FIELD_TYPE
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.UploadTask
 import github.alexzhirkevich.community.core.entities.imp.*
@@ -64,17 +65,23 @@ internal fun Map<String,*>.toPost() : Sendable? {
 }
 
 @ExperimentalCoroutinesApi
-internal fun FileDownloadTask.asLoadingFlow() : Flow<Loading<Unit>> = callbackFlow {
+internal fun FileDownloadTask.asLoadingFlow(fileUri : Uri) : Flow<Loading<Uri>> = callbackFlow {
     val tasks = listOf(
         addOnSuccessListener {
-            trySend(Loading.Success(Unit))
+            trySend(Loading.Success(fileUri))
+            close()
         },
         addOnFailureListener{
-            throw it
+            Loading.Error(it)
+            close(it)
         },
         addOnProgressListener {
-            trySend(Loading.Progress(
-                it.bytesTransferred.toFloat()/it.totalByteCount))
+            trySend(
+                Loading.Progress<Uri>(
+                    it.bytesTransferred.toFloat() / it.totalByteCount,
+                    it.totalByteCount
+                )
+            )
         }
     )
     awaitClose{
@@ -83,20 +90,26 @@ internal fun FileDownloadTask.asLoadingFlow() : Flow<Loading<Unit>> = callbackFl
 }.catch { err -> emit(Loading.Error(err)) }
 
 @ExperimentalCoroutinesApi
-internal fun UploadTask.asLoadingFlow() : Flow<Loading<Uri>> = callbackFlow<Loading<Uri>> {
+internal fun UploadTask.asLoadingFlow() : Flow<Loading<Uri>> = callbackFlow {
     val tasks = listOf(
         addOnSuccessListener {
             launch(Dispatchers.IO) {
                 it.metadata?.reference?.downloadUrl?.await()?.let {
                     trySend(Loading.Success(it))
+                    close()
                 }
             }
         },
         addOnFailureListener {
-            throw it
+            trySend(Loading.Error(it))
+            close(it)
+
         },
         addOnProgressListener {
-            trySend(Loading.Progress(it.bytesTransferred.toFloat() / it.totalByteCount))
+            trySend(Loading.Progress<Uri>(
+                it.bytesTransferred.toFloat() / it.totalByteCount,
+                 it.totalByteCount)
+            )
         }
     )
 
@@ -153,9 +166,9 @@ suspend fun <T> Collection<Task<T>>.awaitAll() : Collection<T> =
 
 suspend fun <T> Task<T>.await() : T = suspendCoroutine<T> { cont ->
     val reg = addOnCompleteListener { t ->
-         t.result?.let { cont.resume(it) } ?:
-         t.exception?.let { cont.resumeWithException(it) }
+        t.result?.let { cont.resume(it) } ?: t.exception?.let { cont.resumeWithException(it) }
     }
+
 }
 
 fun <K,T> Map<K, Flow<T>>.combine() : Flow<Map<K,T>> =
@@ -186,6 +199,24 @@ internal fun <T> Query.asResponse(parser : (Map<String,*>) -> T)
         val reg = addSnapshotListener { qs, error ->
             if (error != null) {
                trySend(listOf(Response.Error(error)))
+            } else if (qs != null) {
+                trySend(qs.asResponses(parser))
+            }
+        }
+        awaitClose{
+            reg.remove()
+        }
+    }.catch { err -> emit(listOf(Response.Error(err))) }
+}
+
+@JvmName("asResponseDoc")
+@ExperimentalCoroutinesApi
+internal fun <T> Query.asResponse(parser : (DocumentSnapshot) -> T)
+        : Flow<Collection<Response<T>>> {
+    return callbackFlow<Collection<Response<T>>> {
+        val reg = addSnapshotListener { qs, error ->
+            if (error != null) {
+                trySend(listOf(Response.Error(error)))
             } else if (qs != null) {
                 trySend(qs.asResponses(parser))
             }
@@ -237,9 +268,26 @@ internal fun <T> QuerySnapshot.asResponses(parser: (Map<String, *>) -> T)
     }
 }
 
+@JvmName("asResponsesDoc")
+internal fun <T> QuerySnapshot.asResponses(parser: (DocumentSnapshot) -> T)
+        : Collection<Response<T>> = documents.mapNotNull {
+    try {
+        it.asResponse(parser)
+    }catch (t :Throwable){
+        Response.Error(t)
+    }
+}
 
 internal inline fun <reified T> QuerySnapshot.asResponses() : Collection<Response<T>> =
-    asResponses { it.toObject() }
+    asResponses { doc  : DocumentSnapshot ->doc.toObject()!! }
+
+@JvmName("asResponseDoc")
+internal fun  <T> DocumentSnapshot.asResponse(parser: (DocumentSnapshot) -> T): Response<T> =
+    Response.Success(
+        value = parser(this),
+        isFromCache = metadata.isFromCache,
+        hasPendingWrites = !metadata.hasPendingWrites()
+    )
 
 internal fun  <T> DocumentSnapshot.asResponse(parser: (Map<String, *>) -> T): Response<T> =
         Response.Success(

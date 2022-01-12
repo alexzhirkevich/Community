@@ -6,8 +6,7 @@ import github.alexzhirkevich.community.core.BuildConfig
 import github.alexzhirkevich.community.core.Response
 import github.alexzhirkevich.community.core.entities.interfaces.SystemMessage
 import github.alexzhirkevich.community.core.entities.interfaces.User
-import github.alexzhirkevich.community.core.providers.interfaces.UsersProvider
-import github.alexzhirkevich.community.smt.translators.ChannelSystemMessageTranslator
+import github.alexzhirkevich.community.core.repo.interfaces.UsersRepository
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.KFunction
 import kotlin.reflect.jvm.isAccessible
@@ -23,7 +22,7 @@ internal interface ISystemMessageTranslator {
 
 
 @ExperimentalStdlibApi
-internal abstract class SMTBase : ISystemMessageTranslator {
+abstract class SMTBase : ISystemMessageTranslator {
 
     override fun translate(context: Context, msg: SystemMessage): Flow<TranslatedMessage> {
         return findMethod(msg.message)?.invoke(context, msg)
@@ -60,7 +59,7 @@ internal abstract class SMTBase : ISystemMessageTranslator {
         }
     }
 
-    protected fun getUser(usersProvider: UsersProvider,id : String) : Flow<User> =
+    protected fun getUser(usersProvider: UsersRepository, id : String) : Flow<User> =
         usersProvider.get(id)
             .mapNotNull { (it as Response.Success).value }
             .catch { err ->

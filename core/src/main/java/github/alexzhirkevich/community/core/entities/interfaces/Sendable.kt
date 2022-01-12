@@ -1,10 +1,12 @@
 package github.alexzhirkevich.community.core.entities.interfaces
 
+interface TimeOwner {
+    var time : Long
+}
 
-interface Sendable  : Entity {
+interface Sendable  : TimeOwner, Entity {
     var type : Int
     var chatId: String
-    var time: Long
 
     companion object {
         const val TYPE_SYSTEM = 1

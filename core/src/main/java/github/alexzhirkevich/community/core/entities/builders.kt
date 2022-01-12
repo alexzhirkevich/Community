@@ -4,97 +4,85 @@ import github.alexzhirkevich.community.core.entities.imp.MessageImpl
 import github.alexzhirkevich.community.core.entities.imp.PostImpl
 import github.alexzhirkevich.community.core.entities.interfaces.Message
 import github.alexzhirkevich.community.core.entities.interfaces.Post
+import github.alexzhirkevich.community.core.entities.interfaces.Sendable
+import javax.inject.Inject
 import github.alexzhirkevich.community.core.entities.MediaContent as MediaContent
 
 interface Builder<T>{
     fun build() : T
 }
 
-interface SendableBuilder {
+interface MessageBuilder<T : Sendable> {
 
-    var text: String?
-    var content : List<MediaContent>?
-    var voice : Voice?
+    fun setReplyTo(message: T?) : MessageBuilder<T>
 
-    fun setText(text : String?) : SendableBuilder
+    fun setText(text: String?) : MessageBuilder<T>
 
-    fun setContent(content: List<MediaContent>?) : SendableBuilder
+    fun setVoice(voice: Voice?) : MessageBuilder<T>
 
-    fun setVoice(voice : Voice?) : SendableBuilder
+    fun setContent(content: List<MediaContent>?): MessageBuilder<T>
 
+    fun build(): T
 }
 
-class PostBuilder(chatId: String) : SendableBuilder, Builder<Post> {
 
-    private val post = PostImpl(chatId = chatId)
+class PostBuilderImpl @Inject constructor(): MessageBuilder<Post>, Builder<Post> {
 
-    override var text: String?
-        get() = post.text
-        set(value) { setText(value) }
+    private var post = PostImpl()
 
-    override var content: List<MediaContent>?
-        get() = post.content
-        set(value) { setContent(value) }
+    override fun setReplyTo(message: Post?): MessageBuilder<Post> {
+        post.replyTo = message
+        return this
+    }
 
-    override var voice: Voice?
-        get() = post.voice
-        set(value) { setVoice(value) }
-
-    override fun setText(text : String?) : PostBuilder {
+    override fun setText(text : String?) : PostBuilderImpl {
         post.text = text
         return this
     }
 
-    override fun setContent(content: List<MediaContent>?) : PostBuilder{
+    override fun setContent(content: List<MediaContent>?) : PostBuilderImpl{
         post.content = content
         return this
     }
 
-    override fun setVoice(voice : Voice?) : PostBuilder {
+    override fun setVoice(voice : Voice?) : PostBuilderImpl {
         post.voice = voice
         return this
     }
 
-    override fun build() : Post = post
+    override fun build() : Post = post.also {
+        post = PostImpl()
+    }
+
 }
 
-class MessageBuilder(channelId : String) : SendableBuilder, Builder<Message> {
+class MessageBuilderImpl @Inject constructor() : MessageBuilder<Message> {
 
-    private val message = MessageImpl(chatId = channelId)
+    private var message = MessageImpl()
 
-    override var text: String?
-        get() = message.text
-        set(value) { setText(value) }
-
-    override var content: List<MediaContent>?
-        get() = message.content
-        set(value) { setContent(value) }
-
-    override var voice: Voice?
-        get() = message.voice
-        set(value) { setVoice(value) }
-
-    override fun setText(text : String?) : MessageBuilder {
+    override fun setText(text : String?) : MessageBuilder<Message> {
         message.text = text
         return this
     }
 
-    override fun setContent(content: List<MediaContent>?) : MessageBuilder{
+    override fun setContent(content: List<MediaContent>?) : MessageBuilder<Message> {
         message.content = content
         return this
     }
 
-    override fun setVoice(voice : Voice?) : MessageBuilder {
+    override fun setVoice(voice : Voice?) : MessageBuilder<Message>  {
         message.voice = voice
         return this
     }
 
-    fun setReplyTo(message : Message?) : MessageBuilder {
+    override fun setReplyTo(message : Message?) : MessageBuilder<Message>  {
         this.message.replyTo = message
         return this
     }
 
-    override fun build(): Message = message
+    override fun build(): Message = message.apply {
+        message = MessageImpl()
+    }
 
 
 }

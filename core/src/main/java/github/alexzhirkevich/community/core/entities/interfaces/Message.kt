@@ -1,6 +1,8 @@
 package github.alexzhirkevich.community.core.entities.interfaces
 
-interface Message : UserSendable, TextSendable, VoiceSendable {
-    var replyTo : Message?
+interface Message :
+    UserSendable<Message>,
+    TextSendable<Message>,
+    VoiceSendable {
     var isViewed : Boolean
 }

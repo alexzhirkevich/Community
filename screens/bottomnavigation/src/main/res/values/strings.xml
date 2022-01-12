@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="events">Events</string>
+    <string name="calls">Calls</string>
+    <string name="chats">Chats</string>
+    <string name="profile">Profile</string>
+
+    <!--    CHATS-->
+    <string name="dont_have_channels">You are not a member of any channel...</string>
+    <string name="dont_have_chats">You don\'t have any chats... Write someone!</string>
+    <string name="write_message">Write message</string>
+    <string name="create_group">Create group</string>
+    <string name="create_channel">Create channel</string>
+    <string name="about">About</string>
+    <string name="settings">Settings</string>
+    <string name="edit_profile">Edit profile</string>
+</resources>

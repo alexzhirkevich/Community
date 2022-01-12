@@ -13,7 +13,22 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/features" />
+            <option value="$PROJECT_DIR$/features/audio-player" />
+            <option value="$PROJECT_DIR$/features/auto-format-text" />
+            <option value="$PROJECT_DIR$/features/media-grid" />
+            <option value="$PROJECT_DIR$/features/message-input" />
+            <option value="$PROJECT_DIR$/features/stickyheader" />
+            <option value="$PROJECT_DIR$/routing" />
+            <option value="$PROJECT_DIR$/screens" />
+            <option value="$PROJECT_DIR$/screens/auth" />
+            <option value="$PROJECT_DIR$/screens/bottomnavigation" />
+            <option value="$PROJECT_DIR$/screens/channel" />
+            <option value="$PROJECT_DIR$/screens/chat" />
+            <option value="$PROJECT_DIR$/screens/fullscreen" />
+            <option value="$PROJECT_DIR$/screens/user-input" />
             <option value="$PROJECT_DIR$/system-message-translator" />
+            <option value="$PROJECT_DIR$/theme" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

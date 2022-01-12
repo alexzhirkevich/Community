@@ -8,7 +8,7 @@ class UserImpl constructor(
     name: String = "",
     phone: String = "",
     override var imageUri: String = "",
-    override var username: String = "",
+    override var tag: String = "",
     override var description: String="",
     override var creationTime: Long =  0,
     override var lastOnline: Long = 0,

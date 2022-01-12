@@ -1,6 +1,8 @@
 package github.alexzhirkevich.community.common.util
 
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import github.alexzhirkevich.community.common.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,6 +48,9 @@ class TimeVisualizer(private val context: Context,private var ms : Long) {
     val year : Int
         get() =calendar.get(Calendar.YEAR)
 
+    val day : Int
+        get() = calendar.get(Calendar.DAY_OF_YEAR)
+
     val dayAndMonthLocalized : String
         get() {
 
@@ -62,6 +67,24 @@ class TimeVisualizer(private val context: Context,private var ms : Long) {
     val dateNoYear: String
         get() =  SimpleDateFormat("dd.MM", Locale.getDefault()).format(ms)
 
+    val lastOnline : String
+        get() = run {
+
+            val now = System.currentTimeMillis().dateTime(context)
+            when {
+                //today
+                day == now.day ->
+                    context.getString(R.string.was_at, time)
+                //yesterday
+                day == now.day-1 || (day - now.day >=360 && System.currentTimeMillis() - ms <= DAY*2) ->
+                    context.getString(R.string.was_yesterday_at, time)
+                else ->
+                    context.getString(R.string.was_ago,timeNearly)
+            }
+        }
 }
+
+@Composable
+fun Long.dateTime() = dateTime(LocalContext.current)
 
 fun Long.dateTime(context : Context) = TimeVisualizer(context,this)

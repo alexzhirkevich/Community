@@ -9,4 +9,24 @@
     <string name="short_week">w</string>
     <string name="short_day">d</string>
     <string name="short_hour">h</string>
+    <string name="error_load_data">Failed to load data</string>
+    <string name="was_at">was at %s</string>
+    <string name="was_yesterday_at">was yesterday at %s</string>
+    <string name="was_ago">was %s ago</string>
+    <string name="online">Online</string>
+    <string name="error_not_found">Not found</string>
+    <string name="tag">Tag</string>
+    <string name="description">Description</string>
+    <string name="notifications_enabled">Enabled</string>
+    <string name="notifications_disabled">Disabled</string>
+    <string name="notifications">Notifications</string>
+    <string name="photo">Photo</string>
+    <string name="video">Video</string>
+    <string name="gif">Gif</string>
+    <string name="file">File</string>
+    <string name="voice">Voice</string>
+    <string name="message">Message</string>
+    <string name="subscribers">%d subscribers</string>
+    <string name="username">Username</string>
+
 </resources>
